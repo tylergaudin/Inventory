@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"m":"gaudin.firstscreen","l":"controller"},{"m":"gaudin.firstscreen","l":"gaudin.inventoryappmain"},{"m":"gaudin.firstscreen","l":"model"}];updateSearchResults();
