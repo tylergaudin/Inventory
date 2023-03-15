@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -30,12 +31,16 @@ public class ModifyProductFormController implements Initializable {
 
 
     private static Product mainProduct = null;
-    private static ObservableList<Part> modifyAssociatedParts = Inventory.getModifyAssocParts();
+    private ObservableList<Part> modifyAssociatedParts = FXCollections.observableArrayList();
     /**
      * Sets mainProduct.
      * @param product the product to set.
      */
-    public static void setMainProduct (Product product) {mainProduct = product;}
+    public static void setMainProduct (Product product)
+    {
+        mainProduct = product;
+        System.out.println("main method");
+    }
 
     @FXML
     private Label TheLabel;
@@ -282,7 +287,7 @@ public class ModifyProductFormController implements Initializable {
         }
         else
         {
-            Product p = (new Product(modifyAssociatedParts, id, name, price, stock, min, max));
+            Product p = (new Product(id, name, price, stock, min, max));
             int l = Inventory.getAllProducts().indexOf(mainProduct);
 
             Inventory.updateProduct(l, p);
@@ -302,7 +307,6 @@ public class ModifyProductFormController implements Initializable {
     {
         Inventory.setModifyAssocParts(mainProduct.getAllAssociatedParts());
         partBankTableView.setItems(Inventory.getAllParts());
-        assocPartsTableView.setItems(mainProduct.getAllAssociatedParts());
 
         partBankIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         partBankNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -316,9 +320,12 @@ public class ModifyProductFormController implements Initializable {
         productMaxTxt.setText(String.valueOf(mainProduct.getMax()));
         productMinTxt.setText(String.valueOf(mainProduct.getMin()));
 
+        assocPartsTableView.setItems(mainProduct.getAllAssociatedParts());
         assocPartsPartIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         assocPartsPartNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         assocPartsInvCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
         assocPartsPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+        System.out.println("Initialized");
     }
 }

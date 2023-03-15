@@ -1,5 +1,6 @@
 package model;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**Defines the Product class. The Product class has a dependency on the Part class and
@@ -10,7 +11,7 @@ import javafx.collections.ObservableList;
  * needed.
  */
 public class Product {
-    private ObservableList<Part> associatedParts;
+    private ObservableList<Part> associatedParts = FXCollections.observableArrayList();
     private int id;
     private String name;
     private double price;
@@ -20,7 +21,6 @@ public class Product {
 
     /**
      * Constructor for Product objects.
-     * @param associatedParts the Product's associated Parts.
      * @param id the Product ID.
      * @param name the Product name.
      * @param price the Product price.
@@ -28,9 +28,8 @@ public class Product {
      * @param min the minimum amount of stock required.
      * @param max the maximum amount of stock allowed.
      */
-    public Product(ObservableList<Part> associatedParts, int id, String name,
+    public Product(int id, String name,
                    double price, int stock, int min, int max) {
-        this.associatedParts = associatedParts;
         this.id = id;
         this.name = name;
         this.price = price;

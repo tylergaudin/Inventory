@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,7 +26,7 @@ public class AddProductFormController implements Initializable {
 
     Stage stage;
     Parent scene;
-    private static ObservableList<Part> associatedParts = Inventory.getAssocParts();
+    private ObservableList<Part> associatedParts = FXCollections.observableArrayList();
 
     @FXML
     private TableColumn<Part, Integer> assocPartsInvCol;
@@ -87,13 +88,6 @@ public class AddProductFormController implements Initializable {
     public void onActionAddPartToProduct(ActionEvent event)
     {
         associatedParts.add(partBankTableView.getSelectionModel().getSelectedItem());
-
-        assocPartsTableView.setItems(associatedParts);
-
-        assocPartsPartIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-        assocPartsPartNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        assocPartsInvCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
-        assocPartsPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
     }
     /**Displays the Main Form. The user clicks the cancel
      * button and the method displays the MainForm scene.
@@ -157,7 +151,9 @@ public class AddProductFormController implements Initializable {
     @FXML
     public void onActionRemovePartFromProduct(ActionEvent event)
     {
-        Alert alert = new Alert
+        associatedParts.remove(assocPartsTableView.getSelectionModel().getSelectedItem());
+
+        /*Alert alert = new Alert
                 (Alert.AlertType.CONFIRMATION,"This will remove the selected part.\n\t\tAre you sure?");
 
         Optional<ButtonType> result = alert.showAndWait();
@@ -183,7 +179,7 @@ public class AddProductFormController implements Initializable {
             alert1.showAndWait();
         }
         else if (result.isPresent() && result.get() == ButtonType.CANCEL)
-            return;
+            return;*/
     }
     /**Saves user inputted Product. Prompts the user,
      * creates a new Product object,
@@ -193,7 +189,7 @@ public class AddProductFormController implements Initializable {
     @FXML
     public void onActionSaveProduct(ActionEvent event) throws IOException
     {
-        int id = maxId() + 1;
+        int id = /*maxId() +*/ 1;
         String name = productNameTxt.getText();
         double price = 0;
         try
@@ -266,7 +262,9 @@ public class AddProductFormController implements Initializable {
        }
        else
        {
-           Inventory.addProduct(new Product(associatedParts, id, name, price, stock, min, max));
+           Product product = new Product(id, name, price, stock, min, max);
+           product.getAllAssociatedParts().addAll(associatedParts);
+           Inventory.addProduct(product);
            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
            scene = FXMLLoader.load(getClass().getResource("/gaudin/view/MainForm.fxml"));
            stage.setScene(new Scene(scene));
@@ -314,5 +312,12 @@ public class AddProductFormController implements Initializable {
         partBankNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         partBankInvCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
         partBankPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+        assocPartsTableView.setItems(associatedParts);
+
+        assocPartsPartIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        assocPartsPartNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        assocPartsInvCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
+        assocPartsPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
     }
 }

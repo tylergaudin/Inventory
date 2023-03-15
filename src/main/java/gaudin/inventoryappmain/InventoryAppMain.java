@@ -4,6 +4,10 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import model.InHouse;
+import model.Inventory;
+import model.Part;
+import model.Product;
 
 import java.io.IOException;
 /**This defines the InventoryAppMain class.
@@ -30,7 +34,21 @@ public class InventoryAppMain extends Application {
      * so I had to add "throws IOException" to
      * the top line and this fixed the issue.
      */
-    public static void main(String[] args) {
+
+
+    public static void main(String[] args)
+    {
+        Part part1 = new InHouse(1,"tire", 10.99, 7, 1, 10,2323);
+        Part part2 = new InHouse(2,"axel", 10.99, 7, 1, 10,2311);
+
+        Product product1 = new Product(1000, "car", 2000.00,5, 1, 10);
+        Product product2 = new Product(1001, "truck", 2001.00,5, 1, 10);
+
+        Inventory.addPart(part1);
+        Inventory.addPart(part2);
+
+        Inventory.addProduct(product1);
+        Inventory.addProduct(product2);
         launch();
     }
 }
