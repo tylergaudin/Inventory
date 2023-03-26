@@ -39,6 +39,7 @@ public class ModifyProductFormController implements Initializable {
     public static void setMainProduct (Product product)
     {
         mainProduct = product;
+        System.out.println(product.getAllAssociatedParts().isEmpty());
         System.out.println("main method");
     }
 
@@ -104,14 +105,7 @@ public class ModifyProductFormController implements Initializable {
     @FXML
     public void onActionAddPartToProduct(ActionEvent event)
     {
-        modifyAssociatedParts.add(partBankTableView.getSelectionModel().getSelectedItem());
-
-        assocPartsTableView.setItems(modifyAssociatedParts);
-
-        assocPartsPartIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-        assocPartsPartNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        assocPartsInvCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
-        assocPartsPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+        mainProduct.addAssociatedPart(partBankTableView.getSelectionModel().getSelectedItem());
     }
     /**Displays the Main Form. The user clicks the cancel
      * button and the method displays the MainForm scene.
@@ -174,32 +168,28 @@ public class ModifyProductFormController implements Initializable {
     @FXML
     public void onActionRemovePartFromProduct(ActionEvent event)
     {
-        Alert alert = new Alert
-                (Alert.AlertType.CONFIRMATION,"This will remove the selected part.\n\t\tAre you sure?");
+       Part selectedPart = assocPartsTableView.getSelectionModel().getSelectedItem();
+       if(selectedPart == null)
+       {
+           Alert alert1 = new Alert(Alert.AlertType.ERROR);
+           alert1.setTitle("Cannot Proceed");
+           alert1.setContentText("There is nothing selected to delete.");
+           alert1.showAndWait();
+       }
+       else
+       {
+           Alert alert = new Alert
+                   (Alert.AlertType.CONFIRMATION, "This will remove the selected part.\n\t\tAre you sure?");
 
-        Optional<ButtonType> result = alert.showAndWait();
+           Optional<ButtonType> result = alert.showAndWait();
 
-        if(result.isPresent() && result.get() == ButtonType.OK)
-        {
-            if(modifyAssociatedParts.remove(assocPartsTableView.getSelectionModel().getSelectedItem()))
-            {
-                assocPartsTableView.setItems(modifyAssociatedParts);
-
-                assocPartsPartIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-                assocPartsPartNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-                assocPartsInvCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
-                assocPartsPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
-            }
-            else
-            {
-                Alert alert1 = new Alert(Alert.AlertType.ERROR);
-                alert1.setTitle("Cannot Proceed");
-                alert1.setContentText("There is nothing selected to delete.");
-                alert1.showAndWait();
-            }
-        }
-        else if (result.isPresent() && result.get() == ButtonType.CANCEL)
-            return;
+           if (result.isPresent() && result.get() == ButtonType.OK)
+           {
+                mainProduct.deleteAssociatedPart(selectedPart);
+           }
+           else if (result.isPresent() && result.get() == ButtonType.CANCEL)
+               return;
+       }
     }
     /**Saves user inputted Product. Prompts the user,
      * creates a new Product object and uses it to update
@@ -288,6 +278,7 @@ public class ModifyProductFormController implements Initializable {
         else
         {
             Product p = (new Product(id, name, price, stock, min, max));
+            p.getAllAssociatedParts().addAll(mainProduct.getAllAssociatedParts());
             int l = Inventory.getAllProducts().indexOf(mainProduct);
 
             Inventory.updateProduct(l, p);
@@ -297,6 +288,7 @@ public class ModifyProductFormController implements Initializable {
             stage.show();
         }
     }
+
     /**Displays and loads the Modify Product Form and its tables.
      * The method initializes when the ModifyProductForm scene is loaded. It sets the
      * partBankTableView table and displays the Add Product Form.

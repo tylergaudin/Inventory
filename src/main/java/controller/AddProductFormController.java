@@ -152,34 +152,6 @@ public class AddProductFormController implements Initializable {
     public void onActionRemovePartFromProduct(ActionEvent event)
     {
         associatedParts.remove(assocPartsTableView.getSelectionModel().getSelectedItem());
-
-        /*Alert alert = new Alert
-                (Alert.AlertType.CONFIRMATION,"This will remove the selected part.\n\t\tAre you sure?");
-
-        Optional<ButtonType> result = alert.showAndWait();
-
-        if(result.isPresent() && result.get() == ButtonType.OK
-                && assocPartsTableView.getSelectionModel().getSelectedItem() != null)
-        {
-            associatedParts.remove(assocPartsTableView.getSelectionModel().getSelectedItem());
-
-            assocPartsTableView.setItems(associatedParts);
-
-            assocPartsPartIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-            assocPartsPartNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-            assocPartsInvCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
-            assocPartsPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
-        }
-        else if (result.isPresent() && result.get() == ButtonType.OK
-                && assocPartsTableView.getSelectionModel().getSelectedItem() == null)
-        {
-            Alert alert1 = new Alert(Alert.AlertType.ERROR);
-            alert1.setTitle("Cannot Proceed");
-            alert1.setContentText("There is nothing selected to delete.");
-            alert1.showAndWait();
-        }
-        else if (result.isPresent() && result.get() == ButtonType.CANCEL)
-            return;*/
     }
     /**Saves user inputted Product. Prompts the user,
      * creates a new Product object,
@@ -189,7 +161,7 @@ public class AddProductFormController implements Initializable {
     @FXML
     public void onActionSaveProduct(ActionEvent event) throws IOException
     {
-        int id = /*maxId() +*/ 1;
+        int id = maxId() + 1;
         String name = productNameTxt.getText();
         double price = 0;
         try
@@ -280,20 +252,12 @@ public class AddProductFormController implements Initializable {
 
         for (Product product : Inventory.getAllProducts())
         {
-            if(Inventory.getAllProducts().size() > 1)
+            if (Max < product.getId())
             {
-                int n = Inventory.getAllProducts().indexOf(product) + 1;
-                Product product2 = Inventory.getAllProducts().get(n);
-
-                if (product.getId() > product2.getId())
-                {
-                    Max = product.getId();
-                }
-                else
-                    continue;
-                }
+                Max = product.getId();
+            }
             else
-                Max = 1000;
+                continue;
         }
         return Max;
     }

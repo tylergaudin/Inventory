@@ -290,19 +290,12 @@ public class AddPartFormController {
 
         for (Part part : Inventory.getAllParts())
         {
-            if(Inventory.getAllParts().size() > 1)
+            if (Max < part.getId())
             {
-                int n = Inventory.getAllParts().indexOf(part) + 1;
-                Part part2 = Inventory.getAllParts().get(n);
-
-                if (part.getId() > part2.getId())
-                {
-                    Max = part.getId();
-                } else
-                    continue;
+                Max = part.getId();
             }
             else
-                Max = 1;
+                continue;
         }
         return Max;
     }

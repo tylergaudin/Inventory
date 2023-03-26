@@ -148,13 +148,7 @@ public class Inventory {
      */
     public static void updateProduct(int index, Product newProduct)
     {
-        for (Product product : Inventory.getAllProducts())
-        {
-            if (product.getId() == newProduct.getId())
-            {
-                Inventory.getAllProducts().set(index, newProduct);
-            }
-        }
+        allProducts.set(index, newProduct);
     }
     /**Finds Part in allParts and deletes it. This method loops through
      * the observable list allParts until it finds a matching Part Id
