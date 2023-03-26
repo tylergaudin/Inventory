@@ -39,8 +39,6 @@ public class ModifyProductFormController implements Initializable {
     public static void setMainProduct (Product product)
     {
         mainProduct = product;
-        System.out.println(product.getAllAssociatedParts().isEmpty());
-        System.out.println("main method");
     }
 
     @FXML
@@ -317,7 +315,5 @@ public class ModifyProductFormController implements Initializable {
         assocPartsPartNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         assocPartsInvCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
         assocPartsPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
-
-        System.out.println("Initialized");
     }
 }

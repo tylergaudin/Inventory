@@ -213,7 +213,6 @@ public class MainFormController implements Initializable {
         }
         else
         {
-            //Inventory.setModifyAssocParts(productTableView.getSelectionModel().getSelectedItem().getAllAssociatedParts());
             ModifyProductFormController.setMainProduct(productTableView.getSelectionModel().getSelectedItem());
 
             stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
